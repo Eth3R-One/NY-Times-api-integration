@@ -8,14 +8,15 @@ function BookSection() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      setTimeout(() => {
-        setBestSellerBooks(get_best_seller_books_list().results.books);
+    setTimeout(() => {
+      try {
+        setBestSellerBooks(get_best_seller_books_list()?.results.books);
+      } catch (error) {
+        console.log(error.message);
+      } finally {
         setIsLoading(false);
-      }, 3000);
-    } catch (error) {
-      console.log(error.message);
-    }
+      }
+    }, 3000);
   }, []);
 
   return (
@@ -39,6 +40,12 @@ function BookSection() {
         <div className="container">
           {isLoading ? (
             <Loading />
+          ) : !bestSellerBooks?.length ? (
+            <div>
+              <p className="flex justify-center text-xl text-red-700">
+                Error fetching data
+              </p>
+            </div>
           ) : (
             <div className="rounded-xl border border-[rgba(206,206,206,0.12)]  px-6 py-4 md:px-9 md:py-10">
               <div className="overflow-x-auto rounded-lg border border-gray-200">

@@ -4,34 +4,26 @@ import {
   get_most_shared_articles,
   get_most_viewed_articles,
 } from "../../testData";
-import { flushSync } from "react-dom";
 import Loading from "./Loading";
 
 function ArticlesSection() {
   const [articleSection, setArticleSection] = useState(0);
   const { heading, details } = getSectionDetails(articleSection);
-  // const [articles, setArticles] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [popularArticles, setPopularArticles] = useState([]);
   const [sharedArticles, setSharedArticles] = useState([]);
-
   const [tempArticles, setTempArticles] = useState([]);
 
   useEffect(() => {
     setIsloading(true);
     setTimeout(() => {
       try {
-        // if (!articles.length > 0) console.log("here");
-        if (!popularArticles.length || !sharedArticles.length) {
+        if (!popularArticles?.length || !sharedArticles?.length) {
           setPopularArticles(get_most_viewed_articles().results);
           setSharedArticles(get_most_shared_articles().results);
         }
-        // setArticles(() =>
-        //   articleSection
-        //     ? get_most_viewed_articles().results
-        //     : get_most_shared_articles().results
-        // );
+
         setIsloading(false);
       } catch (error) {
         console.log(error);
@@ -39,17 +31,12 @@ function ArticlesSection() {
         setIsloading(false);
       }
     }, 3000);
-
-    return () => {
-      setPopularArticles([]);
-      setSharedArticles([]);
-    };
   }, []);
 
   useEffect(() => {
     setTempArticles(() =>
-      (articleSection ? sharedArticles : popularArticles).filter((article) => {
-        if (searchTerm.length < 3) return article;
+      (articleSection ? sharedArticles : popularArticles)?.filter((article) => {
+        if (searchTerm?.length < 3) return article;
         if (article.title.toLowerCase().includes(searchTerm.toLowerCase()))
           return article;
       })
@@ -59,12 +46,6 @@ function ArticlesSection() {
   function handleArticleSection(setionId) {
     setArticleSection(setionId);
   }
-
-  // function handleSearchAction(evt) {
-  //   flushSync(() => setSearchTerm(evt.target.value));
-  //   console.log(evt.target.value);
-  //   console.log(searchTerm);
-  // }
 
   return (
     <div className="pt-20 md:pt-10">
@@ -136,14 +117,20 @@ function ArticlesSection() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
           {isLoading ? (
             <Loading />
+          ) : !searchTerm.length && !tempArticles?.length ? (
+            <div>
+              <p className="flex justify-center text-xl text-red-700">
+                Error fetching data
+              </p>
+            </div>
           ) : (
             <>
-              {tempArticles.length < 1 ? (
+              {tempArticles?.length < 1 ? (
                 <div className="text-center xl:w-full">
                   No search result for: {searchTerm}
                 </div>
               ) : (
-                tempArticles.map((article) => {
+                tempArticles?.map((article) => {
                   return (
                     <div key={article.id} className="py-4 justify-center">
                       <a href={article.url} target="_blank" rel="noreferrer">
@@ -153,7 +140,7 @@ function ArticlesSection() {
                               className="w-24 h-24 rounded snap-center sm:w-48 sm:h-48"
                               alt={article.title}
                               src={
-                                article.media.length > 0
+                                article.media?.length > 0
                                   ? article?.media[0]["media-metadata"][0].url
                                   : ""
                               }
