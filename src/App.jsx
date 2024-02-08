@@ -27,12 +27,10 @@ function App() {
         </button>
       </NavBar>
 
-      {navSelectedSection == 0 ? <ArticlesSection /> : <BookSection />}
       <div className="grid">
-        Hello there
-        <div>{import.meta.env.VITE_SECRET}</div>
+        {navSelectedSection == 0 ? <ArticlesSection /> : <BookSection />}
       </div>
-      <footer className="py-6 md:py-8 align-bottom text-[56px] font-bold leading-none text-[#191D26">
+      <footer className="pb-20 md:pb-8 align-bottom text-[56px] font-bold leading-none text-[#191D26 ">
         <div className="container mx-auto">
           <p className="text-center text-xs text-[#6A6A6A] lg:text-sm">
             © |{" "}

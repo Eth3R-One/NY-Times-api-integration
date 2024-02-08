@@ -1,4 +1,23 @@
+import { useEffect, useState } from "react";
+import { get_best_seller_books_list } from "../../testData";
+import Loading from "./Loading";
+
 function BookSection() {
+  const [bestSellerBooks, setBestSellerBooks] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      setTimeout(() => {
+        setBestSellerBooks(get_best_seller_books_list().results.books);
+        setIsLoading(false);
+      }, 3000);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
+
   return (
     <>
       <div className="pt-20 flex justify-center md:mt-[40px] gap-5"></div>
@@ -10,146 +29,61 @@ function BookSection() {
                 Books
               </h1>
               <p className="text-lg my-2 opacity-80">
-                Get Best Sellers list by date
+                Get Best Sellers book list by date.
               </p>
             </div>
           </div>
         </div>
       </section>
-      <section className="mb-20" id="tasks">
+      <section className="mb-auto" id="tasks">
         <div className="container">
-          <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#d8d9da] px-6 py-8 md:px-9 md:py-16">
-            <div className="overflow-auto">
-              <table className="table-fixed overflow-auto xl:w-full">
-                <thead>
-                  <tr>
-                    <th className="p-4 pb-8 text-sm font-semibold capitalize w-[300px]">
-                      {" "}
-                      Serial{" "}
-                    </th>
-                    <th className="p-4 pb-8 text-sm font-semibold capitalize w-[300px]">
-                      {" "}
-                      Image{" "}
-                    </th>
-                    <th className="p-4 pb-8 text-sm font-semibold capitalize w-full">
-                      {" "}
-                      Title{" "}
-                    </th>
-                    <th className="p-4 pb-8 text-sm font-semibold capitalize md:w-[350px]">
-                      {" "}
-                      Author{" "}
-                    </th>
-                    <th className="p-4 pb-8 text-sm font-semibold capitalize md:w-[100px]">
-                      {" "}
-                      Amazon URL{" "}
-                    </th>
-                    <th className="p-4 pb-8 text-sm font-semibold capitalize md:w-[100px]">
-                      {" "}
-                      Price{" "}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2">
-                    <td className="text-center">1</td>
-                    <td>
-                      <img
-                        className="w-8 h-8"
-                        width="32"
-                        height="32"
-                        src="https://images.pexels.com/photos/20034321/pexels-photo-20034321/free-photo-of-a-hot-air-balloon-flying-through-the-cloudy-sky.jpeg"
-                        alt="Combined Print and E-Book Fiction"
-                      />
-                    </td>
-                    <td>
-                      <div>Combined Print and E-Book Fiction</div>
-                    </td>
-                    <td className="flex justify-center gap-1.5 flex-wrap">
-                      Andy Weir
-                    </td>
-                    <td className="text-center text-blue-500">
-                      <a
-                        href="http://www.amazon.com/The-Martian-Novel-Andy-Weir-ebook/dp/B00EMXBDMA?tag=thenewyorktim-20"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Amazon Url
-                      </a>
-                    </td>
-                    <td>
-                      <div className="flex items-center justify-center space-x-3">
-                        <p className="text-blue-500">$100</p>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2">
-                    <td className="text-center">1</td>
-                    <td>
-                      <img
-                        className="w-8 h-8"
-                        width="32"
-                        height="32"
-                        src="https://images.pexels.com/photos/20034321/pexels-photo-20034321/free-photo-of-a-hot-air-balloon-flying-through-the-cloudy-sky.jpeg"
-                        alt="Combined Print and E-Book Fiction"
-                      />
-                    </td>
-                    <td>
-                      <div>Combined Print and E-Book Fiction</div>
-                    </td>
-                    <td className="flex justify-center gap-1.5 flex-wrap">
-                      Andy Weir
-                    </td>
-                    <td className="text-center text-blue-500">
-                      <a
-                        href="http://www.amazon.com/The-Martian-Novel-Andy-Weir-ebook/dp/B00EMXBDMA?tag=thenewyorktim-20"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Amazon Url
-                      </a>
-                    </td>
-                    <td>
-                      <div className="flex items-center justify-center space-x-3">
-                        <p className="text-blue-500">$100</p>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2">
-                    <td className="text-center">1</td>
-                    <td>
-                      <img
-                        className="w-8 h-8"
-                        width="32"
-                        height="32"
-                        src="https://images.pexels.com/photos/20034321/pexels-photo-20034321/free-photo-of-a-hot-air-balloon-flying-through-the-cloudy-sky.jpeg"
-                        alt="Combined Print and E-Book Fiction"
-                      />
-                    </td>
-                    <td>
-                      <div>Combined Print and E-Book Fiction</div>
-                    </td>
-                    <td className="flex justify-center gap-1.5 flex-wrap">
-                      Andy Weir
-                    </td>
-                    <td className="text-center text-blue-500">
-                      <a
-                        href="http://www.amazon.com/The-Martian-Novel-Andy-Weir-ebook/dp/B00EMXBDMA?tag=thenewyorktim-20"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Amazon Url
-                      </a>
-                    </td>
-                    <td>
-                      <div className="flex items-center justify-center space-x-3">
-                        <p className="text-blue-500">$100</p>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div className="rounded-xl border border-[rgba(206,206,206,0.12)]  px-6 py-4 md:px-9 md:py-10">
+              <div className="overflow-x-auto rounded-lg border border-gray-200">
+                <table className="table w-full">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-2 text-left">Image</th>
+                      <th className="px-4 py-2 text-left">Title</th>
+                      <th className="px-4 py-2 text-left">Author</th>
+                      <th className="px-4 py-2 text-left">Amazon</th>
+                      <th className="px-4 py-2 text-left">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bestSellerBooks.map((book, index) => {
+                      return (
+                        <tr key={index} className="border-t-2">
+                          <td className="px-4 py-2">
+                            <img
+                              src={book.book_image}
+                              alt={book.title}
+                              className="w-16 h-16 rounded-full"
+                            />
+                          </td>
+                          <td className="px-4 py-2">{book.title}</td>
+                          <td className="px-4 py-2">{book.author}</td>
+                          <td className="px-4 py-2">
+                            <a
+                              href={book.amazon_product_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-block text-blue-500 hover:text-blue-700"
+                            >
+                              Buy on Amazon
+                            </a>
+                          </td>
+                          <td className="px-4 py-2">${book.price}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </>

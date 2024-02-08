@@ -1,7 +1,7 @@
 const DETAILS = [
   {
     heading: "Popular Articles",
-    details: "The most viewed articles on NYTimes.com today",
+    details: "The most viewed articles on NYTimes.com today.",
   },
   {
     heading: "Most Shared Articles",
