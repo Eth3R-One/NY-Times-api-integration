@@ -14,7 +14,6 @@ function BookSection() {
   useEffect(() => {
     let ignore = false;
     const contorller = new AbortController();
-    // setIsLoading(true);
     async function best_seller_books() {
       try {
         setIsLoading(true);
@@ -42,7 +41,6 @@ function BookSection() {
       setIsLoading(true);
     };
   }, [date]);
-  // console.log("setted date=>", date);
 
   return (
     <>
@@ -63,7 +61,6 @@ function BookSection() {
               <DatePicker
                 selected={date}
                 onChange={(selectedDate) => {
-                  // console.log("selectedDate=>", selectedDate);
                   setDate(selectedDate.toJSON().slice(0, 10));
                 }}
               />

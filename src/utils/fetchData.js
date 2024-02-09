@@ -1,16 +1,8 @@
 const KEY = import.meta.env.VITE_KEY;
-// const POPULAR_ARTICLE_EMAIL = "mostpopular/v2/emailed/{period}.json";
 const API_URL = "https://api.nytimes.com/svc";
 const POPULAR_ARTICLE_EMAIL = "mostpopular/v2/emailed";
 const MOST_SHARED_ARTICLES = "mostpopular/v2/shared";
 const BEST_SELLER_BOOKS_LIST = "books/v3/lists";
-// https://api.nytimes.com/svc/mostpopular/v2/shared/{period}.json
-// https://api.nytimes.com/svc/books/v3/lists/{date}/{list}.json
-// https://api.nytimes.com/svc
-
-// https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
-
-// https://api.nytimes.com/svc/books/v3/lists/{date}/{list}.json
 
 // https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=API-KEY
 export async function fetch_most_popular_article_sent_in_email() {
