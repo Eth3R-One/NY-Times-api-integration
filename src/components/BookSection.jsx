@@ -2,31 +2,47 @@ import { useEffect, useState } from "react";
 import Loading from "./Loading";
 import { fetch_best_sellers_book_list } from "../utils/fetchData";
 
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 function BookSection() {
   const [bestSellerBooks, setBestSellerBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [date, setDate] = useState(new Date().toJSON().slice(0, 10));
 
   useEffect(() => {
     let ignore = false;
+    const contorller = new AbortController();
+    // setIsLoading(true);
     async function best_seller_books() {
       try {
         setIsLoading(true);
-        const data = await fetch_best_sellers_book_list();
+
+        const data = await fetch_best_sellers_book_list(
+          date,
+          "hardcover-fiction",
+          contorller
+        );
         setBestSellerBooks(data);
-        return data;
       } catch (error) {
         console.log(error.message);
       } finally {
-        setIsLoading(false);
+        if (!ignore) setIsLoading(false);
       }
     }
 
-    if (!ignore) best_seller_books();
+    if (!ignore) {
+      best_seller_books();
+    }
 
     return () => {
+      contorller.abort();
       ignore = true;
+      setIsLoading(true);
     };
-  }, []);
+  }, [date]);
+  // console.log("setted date=>", date);
 
   return (
     <>
@@ -42,14 +58,26 @@ function BookSection() {
                 Get Best Sellers book list by date.
               </p>
             </div>
+            <div className="border-red-500">
+              <span className="pr-10">Select date</span>
+              <DatePicker
+                selected={date}
+                onChange={(selectedDate) => {
+                  // console.log("selectedDate=>", selectedDate);
+                  setDate(selectedDate.toJSON().slice(0, 10));
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
       <section className="mb-auto" id="tasks">
         <div className="container">
+          <div className="border-y-gray-500"></div>
+
           {isLoading ? (
             <Loading />
-          ) : bestSellerBooks?.length < 1 ? (
+          ) : bestSellerBooks?.length == 0 ? (
             <div>
               <p className="flex justify-center text-xl text-red-700">
                 Error fetching data
