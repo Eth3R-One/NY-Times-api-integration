@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { getSectionDetails } from "../utils/getSectionDetails";
-import {
-  get_most_shared_articles,
-  get_most_viewed_articles,
-} from "../../testData";
 import Loading from "./Loading";
+
+const API_URL = "https://api.nytimes.com/svc";
+const POPULAR_ARTICLE_EMAIL = "mostpopular/v2/emailed";
+const MOST_SHARED_ARTICLES = "mostpopular/v2/shared";
 
 function ArticlesSection() {
   const [articleSection, setArticleSection] = useState(0);
@@ -16,32 +16,82 @@ function ArticlesSection() {
   const [tempArticles, setTempArticles] = useState([]);
 
   useEffect(() => {
-    setIsloading(true);
-    setTimeout(() => {
-      try {
-        if (!popularArticles?.length || !sharedArticles?.length) {
-          setPopularArticles(get_most_viewed_articles().results);
-          setSharedArticles(get_most_shared_articles().results);
-        }
+    let ignore = false;
+    async function popular_articles() {
+      setIsloading(true);
 
-        setIsloading(false);
+      try {
+        const res = await fetch(
+          `${API_URL}/${POPULAR_ARTICLE_EMAIL}/7.json?api-key=${import.meta.env.VITE_KEY}`
+        );
+        if (!res.ok)
+          throw new Error(`This is an HTTP error: The status is ${res.status}`);
+        const data = await res.json();
+        setPopularArticles(data.results);
+        setTempArticles(data.results);
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       } finally {
         setIsloading(false);
       }
-    }, 3000);
-  }, []);
+    }
+
+    async function fetch_most_shared_article() {
+      try {
+        setIsloading(true);
+        const res = await fetch(
+          `${API_URL}/${MOST_SHARED_ARTICLES}/7.json?api-key=${import.meta.env.VITE_KEY}`
+        );
+        if (!res.ok) throw new Error(`This is an HTTP error: ${res.status}`);
+        const data = await res.json();
+        setSharedArticles(data.results);
+        setTempArticles(data.json);
+      } catch (error) {
+        console.log(error.message);
+      } finally {
+        setIsloading(false);
+      }
+    }
+
+    if (!ignore) {
+      if (articleSection == 0) {
+        popular_articles();
+      } else {
+        fetch_most_shared_article();
+      }
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [articleSection]);
 
   useEffect(() => {
-    setTempArticles(() =>
-      (articleSection ? sharedArticles : popularArticles)?.filter((article) => {
-        if (searchTerm?.length < 3) return article;
-        if (article.title.toLowerCase().includes(searchTerm.toLowerCase()))
-          return article;
-      })
-    );
-  }, [searchTerm, articleSection, popularArticles, sharedArticles]);
+    let ignore = false;
+    if (!ignore) {
+      if (articleSection === 0) {
+        setTempArticles(() => {
+          return popularArticles?.filter((article) => {
+            if (searchTerm?.length < 3) return article;
+            if (article.title.toLowerCase().includes(searchTerm.toLowerCase()))
+              return article;
+          });
+        });
+      } else {
+        setTempArticles(() => {
+          return sharedArticles?.filter((article) => {
+            if (searchTerm?.length < 3) return article;
+            if (article.title.toLowerCase().includes(searchTerm.toLowerCase()))
+              return article;
+          });
+        });
+      }
+    }
+
+    return () => {
+      ignore = false;
+    };
+  }, [searchTerm, popularArticles, sharedArticles]);
 
   function handleArticleSection(setionId) {
     setArticleSection(setionId);
@@ -117,7 +167,11 @@ function ArticlesSection() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
           {isLoading ? (
             <Loading />
-          ) : !searchTerm.length && !tempArticles?.length ? (
+          ) : !searchTerm.length &&
+            !tempArticles?.length &&
+            (articleSection
+              ? sharedArticles?.length == 0
+              : popularArticles?.length == 0) ? (
             <div>
               <p className="flex justify-center text-xl text-red-700">
                 Error fetching data

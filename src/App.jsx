@@ -26,7 +26,6 @@ function App() {
           Books
         </button>
       </NavBar>
-
       <div className="grid">
         {navSelectedSection == 0 ? <ArticlesSection /> : <BookSection />}
       </div>
