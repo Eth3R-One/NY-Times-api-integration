@@ -49,6 +49,10 @@ To get a local copy up and running follow these simple example steps.
 - Run `npm run dev`
 - Open your browser and go to `http://localhost:5173/`
 
+## Data flow diagram
+
+![Data flow diagram](./src/assets/data-flow.png)
+
 ## Bugs and Issues
 
 Not found yet but if you encounter any bugs or issues, please feel free to open an issue in this repository.

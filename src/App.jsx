@@ -14,7 +14,6 @@ function App() {
       <NavBar>
         <button
           onClick={() => handleClick(0)}
-          // bg-blue-400 text-white
           className={`p-2 rounded ${navSelectedSection == 0 ? "bg-blue-400 text-white" : "bg-white"}`}
         >
           Articles
