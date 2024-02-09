@@ -1,22 +1,31 @@
 import { useEffect, useState } from "react";
-import { get_best_seller_books_list } from "../../testData";
 import Loading from "./Loading";
+import { fetch_best_sellers_book_list } from "../utils/fetchData";
 
 function BookSection() {
   const [bestSellerBooks, setBestSellerBooks] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    let ignore = false;
+    async function best_seller_books() {
       try {
-        setBestSellerBooks(get_best_seller_books_list()?.results.books);
+        setIsLoading(true);
+        const data = await fetch_best_sellers_book_list();
+        setBestSellerBooks(data);
+        return data;
       } catch (error) {
         console.log(error.message);
       } finally {
         setIsLoading(false);
       }
-    }, 3000);
+    }
+
+    if (!ignore) best_seller_books();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (
@@ -40,7 +49,7 @@ function BookSection() {
         <div className="container">
           {isLoading ? (
             <Loading />
-          ) : !bestSellerBooks?.length ? (
+          ) : bestSellerBooks?.length < 1 ? (
             <div>
               <p className="flex justify-center text-xl text-red-700">
                 Error fetching data
@@ -60,9 +69,9 @@ function BookSection() {
                     </tr>
                   </thead>
                   <tbody>
-                    {bestSellerBooks.map((book, index) => {
+                    {bestSellerBooks.books?.map((book) => {
                       return (
-                        <tr key={index} className="border-t-2">
+                        <tr key={book.primary_isbn10} className="border-t-2">
                           <td className="px-4 py-2">
                             <img
                               src={book.book_image}
@@ -82,7 +91,7 @@ function BookSection() {
                               Buy on Amazon
                             </a>
                           </td>
-                          <td className="px-4 py-2">${book.price}</td>
+                          <td className="px-4 py-2">$ {book.price} </td>
                         </tr>
                       );
                     })}
