@@ -65,7 +65,7 @@ function BookSection() {
                 Get Best Sellers book list by date.
               </p>
             </div>
-            <div className="border-red-500">
+            <div className="bg-blue-950">
               <span className="pr-10">Select date</span>
               <DatePicker
                 selected={date}

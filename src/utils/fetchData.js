@@ -51,7 +51,9 @@ export async function fetch_best_sellers_book_list(
     return [];
   }
   if (!res.ok) {
-    setErrorMsg(`${res.statusText}. Please wait some time and refresh the page.`);
+    setErrorMsg(
+      `${res.statusText}. Please wait some time and refresh the page.`
+    );
     throw new Error(`This is an HTTP error: ${res.status}`);
   }
   const data = await res.json();
