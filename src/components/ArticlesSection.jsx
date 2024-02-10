@@ -15,6 +15,8 @@ function ArticlesSection() {
   const [sharedArticles, setSharedArticles] = useState([]);
   const [tempArticles, setTempArticles] = useState([]);
 
+  const [errorMsg, setErrorMsg] = useState("");
+
   useEffect(() => {
     let ignore = false;
     async function popular_articles() {
@@ -24,8 +26,12 @@ function ArticlesSection() {
         const res = await fetch(
           `${API_URL}/${POPULAR_ARTICLE_EMAIL}/7.json?api-key=${import.meta.env.VITE_KEY}`
         );
-        if (!res.ok)
+        if (!res.ok) {
+          setErrorMsg(
+            `${res.statusText}. Please wait some time and refresh the page.`
+          );
           throw new Error(`This is an HTTP error: The status is ${res.status}`);
+        }
         const data = await res.json();
         setPopularArticles(data.results);
         setTempArticles(data.results);
@@ -42,7 +48,12 @@ function ArticlesSection() {
         const res = await fetch(
           `${API_URL}/${MOST_SHARED_ARTICLES}/7.json?api-key=${import.meta.env.VITE_KEY}`
         );
-        if (!res.ok) throw new Error(`This is an HTTP error: ${res.status}`);
+        if (!res.ok) {
+          setErrorMsg(
+            `${res.statusText}. Please wait some time and refresh the page.`
+          );
+          throw new Error(`This is an HTTP error: ${res.status}`);
+        }
         const data = await res.json();
         setSharedArticles(data.results);
         setTempArticles(data.json);
@@ -174,7 +185,7 @@ function ArticlesSection() {
               : popularArticles?.length == 0) ? (
             <div>
               <p className="flex justify-center text-xl text-red-700">
-                Error fetching data
+                Error fetching data: {errorMsg}
               </p>
             </div>
           ) : (
