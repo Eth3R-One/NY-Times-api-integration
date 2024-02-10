@@ -44,8 +44,6 @@ function BookSection() {
   }, [date]);
 
   function handleDateChange(selectedDate) {
-    console.log(selectedDate);
-    console.log(selectedDate.length);
     if (selectedDate === null || selectedDate === "")
       setDate(new Date().toJSON().slice(0, 10));
     else setDate(selectedDate.toJSON().slice(0, 10));

@@ -45,7 +45,6 @@ export async function fetch_best_sellers_book_list(
     `${API_URL}/${BEST_SELLER_BOOKS_LIST}/${date}/${list}.json?api-key=${import.meta.env.VITE_KEY}`,
     { signal: contorller.signal }
   );
-  console.log(res);
   if (res?.status === 404) {
     setErrorMsg(`${res.statusText} reults for ${date}`);
     return [];
