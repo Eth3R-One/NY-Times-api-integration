@@ -10,6 +10,7 @@ function BookSection() {
   const [bestSellerBooks, setBestSellerBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [date, setDate] = useState(new Date().toJSON().slice(0, 10));
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     let ignore = false;
@@ -17,14 +18,15 @@ function BookSection() {
     async function best_seller_books() {
       try {
         setIsLoading(true);
-
         const data = await fetch_best_sellers_book_list(
           date,
           "hardcover-fiction",
-          contorller
+          contorller,
+          setErrorMsg
         );
         setBestSellerBooks(data);
       } catch (error) {
+        bestSellerBooks.length = 0;
         console.log(error.message);
       } finally {
         if (!ignore) setIsLoading(false);
@@ -38,9 +40,16 @@ function BookSection() {
     return () => {
       contorller.abort();
       ignore = true;
-      setIsLoading(true);
     };
   }, [date]);
+
+  function handleDateChange(selectedDate) {
+    console.log(selectedDate);
+    console.log(selectedDate.length);
+    if (selectedDate === null || selectedDate === "")
+      setDate(new Date().toJSON().slice(0, 10));
+    else setDate(selectedDate.toJSON().slice(0, 10));
+  }
 
   return (
     <>
@@ -61,7 +70,7 @@ function BookSection() {
               <DatePicker
                 selected={date}
                 onChange={(selectedDate) => {
-                  setDate(selectedDate.toJSON().slice(0, 10));
+                  handleDateChange(selectedDate);
                 }}
               />
             </div>
@@ -77,7 +86,7 @@ function BookSection() {
           ) : bestSellerBooks?.length == 0 ? (
             <div>
               <p className="flex justify-center text-xl text-red-700">
-                Error fetching data
+                Error fetching data: {errorMsg}
               </p>
             </div>
           ) : (

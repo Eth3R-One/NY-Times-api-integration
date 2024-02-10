@@ -37,17 +37,23 @@ export async function fetch_most_shared_article() {
 export async function fetch_best_sellers_book_list(
   date = null,
   list = "hardcover-fiction",
-  contorller
+  contorller,
+  setErrorMsg
 ) {
   if (date === null) date = new Date().toJSON().slice(0, 10);
   const res = await fetch(
     `${API_URL}/${BEST_SELLER_BOOKS_LIST}/${date}/${list}.json?api-key=${import.meta.env.VITE_KEY}`,
     { signal: contorller.signal }
   );
+  console.log(res);
   if (res?.status === 404) {
+    setErrorMsg(`${res.statusText} reults for ${date}`);
     return [];
   }
-  if (!res.ok) throw new Error(`This is an HTTP error: ${res.status}`);
+  if (!res.ok) {
+    setErrorMsg(`${res.statusText}. Please wait some time and refresh the page.`);
+    throw new Error(`This is an HTTP error: ${res.status}`);
+  }
   const data = await res.json();
   return data.results;
 }
