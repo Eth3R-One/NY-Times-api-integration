@@ -31,7 +31,7 @@ To get a local copy up and running follow these simple example steps.
 ### Prerequisites
 
 - NY Times API key
-  - Create a developer account  **[NY Times API]([text](https://developer.nytimes.com/get-started))**
+  - Create a developer account **[NY Times API](https://developer.nytimes.com/get-started)**
   - Create a new app and give it a name and description
   - enable the `Books API` and `Most Popular API`
   - Copy the API key
